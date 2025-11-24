@@ -3,25 +3,23 @@ import { useLocation, Link } from "react-router-dom";
 
 const Results = () => {
   const location = useLocation();
-  const data = location.state;
+  const analysis = location.state?.analysis;
 
   return (
-    <div className="results-wrapper popup-fade">
-      <h2 className="neon-text">Analysis Results</h2>
+    <div style={{ padding: "30px", color: "white" }}>
+      <h2>AI Resume Analysis</h2>
 
-      {!data ? (
-        <p>
-          No analysis found. Please{" "}
-          <Link to="/" className="nav-link">
-            upload a resume
-          </Link>{" "}
-          first.
-        </p>
+      {!analysis ? (
+        <p>No analysis found. <Link to="/">Upload again</Link></p>
       ) : (
-        <div className="results-content">
-          <pre className="results-json">
-            {JSON.stringify(data, null, 2)}
-          </pre>
+        <div style={{
+          background: "rgba(255,255,255,0.1)",
+          padding: "20px",
+          borderRadius: "12px",
+          whiteSpace: "pre-wrap",
+          lineHeight: "1.6"
+        }}>
+          {analysis}
         </div>
       )}
     </div>
