@@ -1,27 +1,27 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
+import "./Results.css"; // styling file we will create
 
 const Results = () => {
   const location = useLocation();
-  const analysis = location.state?.analysis;
+  const analysis = location.state?.analysis || "";
+
+  // Split the response into structured sections
+  const sections = analysis.split("###").map((section) => section.trim());
 
   return (
-    <div style={{ padding: "30px", color: "white" }}>
-      <h2>AI Resume Analysis</h2>
+    <div className="results-container">
+      <h1 className="title">AI Resume Insights</h1>
 
-      {!analysis ? (
-        <p>No analysis found. <Link to="/">Upload again</Link></p>
-      ) : (
-        <div style={{
-          background: "rgba(255,255,255,0.1)",
-          padding: "20px",
-          borderRadius: "12px",
-          whiteSpace: "pre-wrap",
-          lineHeight: "1.6"
-        }}>
-          {analysis}
+      {sections.map((section, index) => (
+        <div key={index} className="glass-card">
+          <p className="text">{section}</p>
         </div>
-      )}
+      ))}
+
+      <Link to="/" className="back-btn">
+        Analyze Another Resume
+      </Link>
     </div>
   );
 };
