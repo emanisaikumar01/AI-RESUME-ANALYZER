@@ -24,7 +24,7 @@ router.post("/", upload.single("file"), async (req, res) => {
 
   const response = await fetch(
   `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateText?key=${apiKey}`,
-,
+
   {
     method: "POST",
     headers: { "Content-Type": "application/json" },
