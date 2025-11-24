@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./UploadStyle.css";
 
-const Home = () => {
+const UploadResume = () => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -12,7 +11,10 @@ const Home = () => {
   };
 
   const analyzeResume = async () => {
-    if (!file) return alert("Please upload a file first");
+    if (!file) {
+      alert("Please select a file first.");
+      return;
+    }
 
     setLoading(true);
 
@@ -27,26 +29,28 @@ const Home = () => {
 
       const data = await response.json();
       navigate("/results", { state: data });
-    } catch (err) {
-      alert("Error analyzing resume");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to analyze, please try again.");
     }
+
     setLoading(false);
   };
 
   return (
     <div className="upload-container">
       <div className="glass-card">
-        <h1 className="title">🚀 AI Resume Analyzer</h1>
-        <p className="sub">Upload your resume & get smart career insights</p>
+        <h2 className="title">AI Resume Analyzer</h2>
+        <p className="sub">Upload your resume and let AI analyze your skills & career fit</p>
 
         <label className="file-btn">
           Choose File
-          <input type="file" accept=".pdf,.doc,.docx,.txt" onChange={handleFileSelect} hidden />
+          <input type="file" accept=".pdf,.doc,.docx,.txt" hidden onChange={handleFileSelect} />
         </label>
 
         {file && <p className="file-name">📂 {file.name}</p>}
 
-        <button className="analyze-btn" onClick={analyzeResume}>
+        <button className="analyze-btn" onClick={analyzeResume} disabled={loading}>
           {loading ? "Analyzing..." : "Analyze Resume"}
         </button>
       </div>
@@ -54,4 +58,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default UploadResume;
