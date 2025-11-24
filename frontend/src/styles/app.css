@@ -1,0 +1,178 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, #111827 0, #020617 40%, #000 100%);
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Poppins", sans-serif;
+}
+
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  padding: 32px;
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+  background: linear-gradient(90deg, rgba(15, 23, 42, 0.9), rgba(8, 47, 73, 0.9));
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.25);
+}
+
+.nav-logo {
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e0f2fe;
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #cbd5f5;
+  font-size: 0.95rem;
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, #22d3ee, #a855f7);
+  transition: width 0.25s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 40px;
+  margin-top: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left {
+  max-width: 600px;
+}
+
+.hero-title {
+  font-size: 2.8rem;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.hero-title span {
+  color: #22d3ee;
+}
+
+.glow-text {
+  text-shadow: 0 0 18px rgba(34, 211, 238, 0.6);
+}
+
+.hero-subtitle {
+  color: #9ca3af;
+  max-width: 520px;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.8);
+  font-size: 0.8rem;
+}
+
+.hero-right {
+  display: flex;
+  justify-content: center;
+}
+
+.orbit-circle {
+  position: absolute;
+  border-radius: 9999px;
+  border: 1px dashed rgba(148, 163, 184, 0.4);
+  animation: spin 18s linear infinite;
+  pointer-events: none;
+}
+
+.orbit-1 {
+  width: 420px;
+  height: 420px;
+  top: -80px;
+  right: -120px;
+}
+
+.orbit-2 {
+  width: 280px;
+  height: 280px;
+  top: 20px;
+  right: 10px;
+  animation-duration: 14s;
+}
+
+.orbit-3 {
+  width: 160px;
+  height: 160px;
+  top: 80px;
+  right: 120px;
+  animation-duration: 10s;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.results-wrapper {
+  max-width: 900px;
+  margin: 40px auto 0;
+}
+
+.results-json {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #020617;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  max-height: 420px;
+  overflow: auto;
+  font-size: 0.9rem;
+}
+
+.bottom-glow {
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, #22d3ee, #a855f7, transparent);
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.8);
+}
