@@ -1,22 +1,19 @@
 const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const { handleResumeUpload } = require("../controllers/resumeController");
-
 const router = express.Router();
+const multer = require("multer");
+const upload = multer();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "backend/uploads");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+router.post("/", upload.single("file"), async (req, res) => {
+  try {
+    console.log("File received:", req.file);
+
+    // Your processing logic....
+
+    res.json({ success: true, message: "Uploaded successfully" });
+  } catch (error) {
+    console.error("Error in /upload:", error);
+    res.status(500).json({ error: error.message });
   }
 });
-
-const upload = multer({ storage });
-
-router.post("/", upload.single("resume"), handleResumeUpload);
 
 module.exports = router;
