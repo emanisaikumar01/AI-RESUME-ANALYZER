@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/UploadStyle.css";
+import "../styles/FuturisticUpload.css";
 
 const Home = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -8,34 +8,25 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleDrag = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (event.type === "dragenter" || event.type === "dragover") {
-      setDragActive(true);
-    } else if (event.type === "dragleave" || event.type === "drop") {
-      setDragActive(false);
-    }
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragActive(false);
+    const file = e.dataTransfer.files[0];
+    if (file) setSelectedFile(file);
   };
 
-  const handleDrop = (event) => {
-    event.preventDefault();
-    setDragActive(false);
-    const file = event.dataTransfer.files[0];
-    if (file) setSelectedFile(file);
+  const handleDrag = (e) => {
+    e.preventDefault();
+    if (e.type === "dragenter" || e.type === "dragover") setDragActive(true);
+    else if (e.type === "dragleave") setDragActive(false);
   };
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) setSelectedFile(file);
+    setSelectedFile(event.target.files[0]);
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) {
-      alert("Please upload a resume file first.");
-      return;
-    }
+    if (!selectedFile) return alert("Please upload a resume!");
 
     setLoading(true);
 
@@ -51,44 +42,36 @@ const Home = () => {
       const data = await response.json();
       navigate("/results", { state: { analysis: data.analysis } });
     } catch (error) {
-      console.error(error);
-      alert("Upload failed. Try again.");
+      alert("Upload failed, try again.");
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="upload-container">
+    <div className="futuristic-container">
       <div
-        className={`drop-card ${dragActive ? "drag-active" : ""}`}
+        className={`drop-zone ${dragActive ? "active" : ""}`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
-        <div className="upload-icon">⬆</div>
-        <h2 className="dz-title">
-          {selectedFile ? selectedFile.name : "Drag & Drop your resume here"}
+        <div className="upload-icon"></div>
+        <h2 className="upload-title">
+          {selectedFile ? selectedFile.name : "Drag & Drop Your Resume"}
         </h2>
-        <p className="dz-sub">Supports PDF, DOCX, TXT</p>
+        <p className="upload-sub">Supports PDF, DOCX, TXT</p>
 
-        <input
-          type="file"
-          id="fileUpload"
-          accept=".pdf,.docx,.txt"
-          hidden
-          onChange={handleFileChange}
-        />
-
-        <label className="browse-btn" htmlFor="fileUpload">
-          Browse File
-        </label>
-
-        <button className="analyze-btn" onClick={handleUpload}>
-          {loading ? "Analyzing..." : "Analyze Resume"}
-        </button>
+        <input type="file" id="fileUpload" hidden accept=".pdf,.docx,.txt" onChange={handleFileChange} />
+        <label htmlFor="fileUpload" className="neon-btn">Browse File</label>
       </div>
+
+      <button className="analyze-btn" onClick={handleUpload}>
+        {loading ? "Analyzing..." : "Analyze Resume"}
+      </button>
+
+      <div id="particles"></div>
     </div>
   );
 };
