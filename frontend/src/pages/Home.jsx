@@ -13,7 +13,7 @@ const Home = () => {
     <div className="home-hero">
       <div className="hero-left">
         <h1 className="hero-title glow-text">
-          Futuristic <span>AI Resume Analyzer</span>
+          <span>AI Resume Analyzer</span>
         </h1>
         <p className="hero-subtitle">
           Let our AI agent read your resume, map your skills, and highlight
