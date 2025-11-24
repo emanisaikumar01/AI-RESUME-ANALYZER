@@ -8,6 +8,17 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const handleDrag = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (event.type === "dragenter" || event.type === "dragover") {
+      setDragActive(true);
+    } else if (event.type === "dragleave" || event.type === "drop") {
+      setDragActive(false);
+    }
+  };
+
   const handleDrop = (event) => {
     event.preventDefault();
     setDragActive(false);
@@ -15,20 +26,14 @@ const Home = () => {
     if (file) setSelectedFile(file);
   };
 
-  const handleDrag = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (event.type === "dragenter" || event.type === "dragover") setDragActive(true);
-    else if (event.type === "dragleave") setDragActive(false);
-  };
-
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file) setSelectedFile(file);
   };
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      alert("Please upload a resume first.");
+      alert("Please upload a resume file first.");
       return;
     }
 
@@ -46,34 +51,39 @@ const Home = () => {
       const data = await response.json();
       navigate("/results", { state: { analysis: data.analysis } });
     } catch (error) {
+      console.error(error);
       alert("Upload failed. Try again.");
     }
+
     setLoading(false);
   };
 
   return (
     <div className="upload-container">
-      <div className={`drop-card ${dragActive ? "active" : ""}`}
-           onDragEnter={handleDrag}
-           onDragLeave={handleDrag}
-           onDragOver={handleDrag}
-           onDrop={handleDrop}
+      <div
+        className={`drop-card ${dragActive ? "drag-active" : ""}`}
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
       >
         <div className="upload-icon">⬆</div>
-        <h2>Drop your resume here</h2>
-        <p>Supports PDF, DOCX, TXT</p>
+        <h2 className="dz-title">
+          {selectedFile ? selectedFile.name : "Drag & Drop your resume here"}
+        </h2>
+        <p className="dz-sub">Supports PDF, DOCX, TXT</p>
 
         <input
           type="file"
-          accept=".pdf,.docx,.txt"
           id="fileUpload"
+          accept=".pdf,.docx,.txt"
           hidden
           onChange={handleFileChange}
         />
 
-        <label className="browse-btn" htmlFor="fileUpload">Browse File</label>
-
-        {selectedFile && <p className="file-name">{selectedFile.name}</p>}
+        <label className="browse-btn" htmlFor="fileUpload">
+          Browse File
+        </label>
 
         <button className="analyze-btn" onClick={handleUpload}>
           {loading ? "Analyzing..." : "Analyze Resume"}
