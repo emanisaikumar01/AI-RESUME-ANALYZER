@@ -1,47 +1,52 @@
 const express = require("express");
 const multer = require("multer");
 const pdfParse = require("pdf-parse");
+
 const router = express.Router();
 const upload = multer();
 
 router.post("/", upload.single("file"), async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
 
     console.log("📄 File received");
 
+    // Extract text from PDF
     const pdfData = await pdfParse(req.file.buffer);
-    const extractedText = pdfData.text;
+    const extractedText = pdfData.text || "";
     console.log("📄 Extracted text length:", extractedText.length);
 
     const apiKey = process.env.GEMINI_API_KEY;
     const prompt = `Analyze the following resume and provide:
-- Skills
-- Weaknesses
-- Job role suggestions
-- ATS score
-\n\n${extractedText}`;
+- Key skills (bullet list)
+- Weaknesses / gaps (bullet list)
+- 3 suggested job roles
+- An approximate ATS score (0–100) with 1–2 lines of reasoning.
 
-  const response = await fetch(
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateText?key=${apiKey}`,
+Resume text:
+${extractedText}`;
 
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-    }),
-  }
-);
-
-
+    // 🔥 Use a CURRENT model: gemini-2.5-flash
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+        }),
+      }
+    );
 
     const result = await response.json();
-    console.log("🤖 Gemini response:", JSON.stringify(result, null, 2));
+    console.log("🤖 Gemini raw response:", JSON.stringify(result, null, 2));
 
-    if (!result.candidates || !result.candidates[0]) {
+    if (!result.candidates || !result.candidates.length) {
+      console.error("Gemini returned no candidates:", result);
       return res.status(500).json({
-        error: "AI could not generate analysis. Try a different PDF.",
+        error: "AI could not generate analysis",
         details: result,
       });
     }
@@ -52,9 +57,8 @@ router.post("/", upload.single("file"), async (req, res) => {
       success: true,
       analysis,
     });
-
   } catch (error) {
-    console.error("🔥 Error:", error);
+    console.error("🔥 Error in /upload:", error);
     res.status(500).json({ error: error.message });
   }
 });
