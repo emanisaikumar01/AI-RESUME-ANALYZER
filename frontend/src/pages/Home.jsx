@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/FuturisticUpload.css";
+import "../styles/UploadStyle.css";
 
 const Home = () => {
   const [selectedFile, setSelectedFile] = useState(null);
