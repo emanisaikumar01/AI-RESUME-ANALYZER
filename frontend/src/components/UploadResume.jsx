@@ -42,12 +42,21 @@ const UploadResume = () => {
   };
 
   return (
-    <div>
-      <input type="file" accept=".pdf,.docx,.txt" onChange={handleFileChange} />
-      <button onClick={handleUpload} disabled={loading}>
-        {loading ? "Analyzing..." : "Upload & Analyze"}
-      </button>
-    </div>
+    <div className="file-upload-container">
+  <label className="custom-file-upload">
+    <input
+      type="file"
+      accept=".pdf,.docx,.txt"
+      onChange={handleFileChange}
+    />
+    Choose Resume
+  </label>
+
+  <button className="analyze-btn" onClick={handleUpload} disabled={loading}>
+    {loading ? "Analyzing..." : "Analyze Resume"}
+  </button>
+</div>
+
   );
 };
 
