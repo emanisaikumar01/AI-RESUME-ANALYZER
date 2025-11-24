@@ -1,90 +1,69 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./UploadResume.css";
 
 const UploadResume = () => {
-  const [file, setFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
-  const inputRef = useRef(null);
   const navigate = useNavigate();
-
-  const handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    e.stopPropagation();
     setDragActive(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      setFile(e.dataTransfer.files[0]);
-      e.dataTransfer.clearData();
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      setSelectedFile(e.dataTransfer.files[0]);
     }
   };
 
-  const openFileDialog = () => {
-    inputRef.current.click();
-  };
-
-  const onFileSelect = (e) => {
-    setFile(e.target.files[0]);
-  };
-
-  const analyzeResume = async () => {
-    if (!file) {
-      alert("Upload or drop a resume first!");
-      return;
-    }
+  const handleUpload = async () => {
+    if (!selectedFile) return alert("Please upload a resume first!");
 
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", selectedFile);
 
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/upload`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/upload`, {
         method: "POST",
         body: formData,
       });
 
-      const data = await response.json();
+      const data = await res.json();
       navigate("/results", { state: data });
-    } catch (error) {
-      alert("Error analyzing resume");
+    } catch (err) {
+      alert("Error analyzing resume. Please try again.");
     }
     setLoading(false);
   };
 
   return (
     <div className="upload-container">
-      <div
-        className={`glass-card drop-zone ${dragActive ? "active" : ""}`}
-        onClick={openFileDialog}
-        onDragEnter={handleDrag}
-        onDragOver={handleDrag}
-        onDragLeave={handleDrag}
-        onDrop={handleDrop}
-      >
-        <h2 className="title">Upload Resume</h2>
-        <p className="sub">Drag & Drop your resume here or click to browse</p>
+      <div className="glass-card">
+
+        <h2 className="title">AI Resume Analyzer</h2>
+        <p className="sub">Drop your resume here or click to upload</p>
+
+        {/* Drag area */}
+        <div
+          className={`drop-zone ${dragActive ? "drag-active" : ""}`}
+          onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+          onDragLeave={() => setDragActive(false)}
+          onDrop={handleDrop}
+          onClick={() => document.getElementById("file-input").click()}
+        >
+          {selectedFile ? selectedFile.name : "Drag & Drop Resume Here"}
+        </div>
 
         <input
+          id="file-input"
           type="file"
-          ref={inputRef}
-          accept=".pdf,.doc,.docx,.txt"
+          accept=".pdf,.docx,.txt"
           style={{ display: "none" }}
-          onChange={onFileSelect}
+          onChange={(e) => setSelectedFile(e.target.files[0])}
         />
 
-        {file && <p className="file-name">📄 {file.name}</p>}
-
-        <button className="analyze-btn" onClick={analyzeResume} disabled={loading}>
+        <button className="analyze-btn" onClick={handleUpload}>
           {loading ? "Analyzing..." : "Analyze Resume"}
         </button>
       </div>
