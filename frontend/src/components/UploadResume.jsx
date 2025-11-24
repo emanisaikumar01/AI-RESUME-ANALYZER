@@ -1,56 +1,55 @@
 import React, { useState } from "react";
-import { uploadResumeAPI } from "../api/backendAPI";
 
-const UploadResume = ({ onUploadComplete }) => {
+const UploadResume = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
   };
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      alert("Please choose a file first");
+      alert("Please select a file first.");
       return;
     }
 
-    try {
-      setLoading(true);
-      const formData = new FormData();
-      formData.append("resume", selectedFile);
+    setLoading(true);
 
-      const result = await uploadResumeAPI(formData);
-      onUploadComplete(result);
-    } catch (err) {
-      console.error(err);
-      alert("Upload failed. Check console for details.");
-    } finally {
-      setLoading(false);
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile); // 🔥 Correct field name
+
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText);
+      }
+
+      const data = await response.json();
+      console.log(data);
+      alert("Upload successful!");
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Upload failed. Please try again.");
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="upload-card neon-box popup-fade">
-      <h2 className="neon-text">Upload Your Resume</h2>
-      <p className="upload-subtext">
-        Drop your PDF resume and let the AI agent analyze your skills, gaps,
-        and best-fit roles.
-      </p>
-
-      <div className="file-drop">
-        <input type="file" onChange={handleFileChange} />
-      </div>
-
-      <button className="neon-btn" onClick={handleUpload} disabled={loading}>
-        {loading ? "Analyzing..." : "Upload & Analyze"}
+    <div>
+      <input type="file" accept=".pdf" onChange={handleFileChange} />
+      <button onClick={handleUpload} disabled={loading}>
+        {loading ? "Uploading..." : "Upload"}
       </button>
-
-      {selectedFile && (
-        <p className="file-name flicker-slow">
-          Selected: <span>{selectedFile.name}</span>
-        </p>
-      )}
     </div>
   );
 };
