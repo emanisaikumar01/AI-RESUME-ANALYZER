@@ -22,8 +22,10 @@ const UploadResume = () => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       setFile(e.dataTransfer.files[0]);
+      e.dataTransfer.clearData();
     }
   };
 
@@ -54,7 +56,7 @@ const UploadResume = () => {
       const data = await response.json();
       navigate("/results", { state: data });
     } catch (error) {
-      alert("Error analyzing resume. Try again.");
+      alert("Error analyzing resume");
     }
     setLoading(false);
   };
@@ -65,8 +67,8 @@ const UploadResume = () => {
         className={`glass-card drop-zone ${dragActive ? "active" : ""}`}
         onClick={openFileDialog}
         onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
         onDragOver={handleDrag}
+        onDragLeave={handleDrag}
         onDrop={handleDrop}
       >
         <h2 className="title">Upload Resume</h2>
@@ -75,9 +77,9 @@ const UploadResume = () => {
         <input
           type="file"
           ref={inputRef}
-          onChange={onFileSelect}
           accept=".pdf,.doc,.docx,.txt"
-          hidden
+          style={{ display: "none" }}
+          onChange={onFileSelect}
         />
 
         {file && <p className="file-name">📄 {file.name}</p>}
