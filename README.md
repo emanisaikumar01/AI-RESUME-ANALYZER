@@ -3,8 +3,8 @@
 An AI-powered multi-agent Resume Analyzer that evaluates resumes, identifies skill gaps, provides improvement suggestions, and matches candidates with relevant job roles. This project uses **multi-agent collaboration**, **Gemini LLM**, **memory**, and **parallel evaluation logic** to enhance resume quality and accelerate the hiring process.
 
 ## 🚀 Live Demo
-🔗 **Frontend:** https://your-frontend-link  
-🔗 **Backend API:** https://your-backend-link  
+🔗 **Frontend:** https://ai-resume-analyzer-1cnm5hcn1-sai-kumar-s-projects.vercel.app/
+🔗 **Backend API:** https://ai-resume-analyzer-0cok.onrender.com
 📂 **GitHub Repository:** https://github.com/emanisaikumar01/AI-RESUME-ANALYZER
 
 ---
@@ -124,7 +124,14 @@ Backend deployed on Render / Railway / Cloud Run
 
 Environment variables secure (🚫 no API keys committed)
 
-📸 Screenshots
+
+## 📸 Screenshots
+
+### 📝 Before Analysis (Uploaded Resume)
+![Pre Analysis](https://raw.githubusercontent.com/emanisaikumar01/AI-RESUME-ANALYZER/main/pre%20analysis.png)
+
+### 📊 After AI Analysis Results
+![Post Analysis](https://raw.githubusercontent.com/emanisaikumar01/AI-RESUME-ANALYZER/main/post%20analysis.png)
 
 
 
