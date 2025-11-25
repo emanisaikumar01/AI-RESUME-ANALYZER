@@ -120,11 +120,12 @@ Backend deployed on: Render
 
 Environment variables secure (🚫 no API keys committed)
 
-📸 Screenshots
-📝 Before Analysis (Uploaded Resume)
+## 📸 Screenshots
+
+### 📝 Before Analysis (Uploaded Resume)
 ![Pre Analysis](https://raw.githubusercontent.com/emanisaikumar01/AI-RESUME-ANALYZER/main/pre%20analysis.png)
 
-📊 After AI Analysis Results
+### 📊 After AI Analysis Results
 ![Post Analysis](https://raw.githubusercontent.com/emanisaikumar01/AI-RESUME-ANALYZER/main/post%20analysis.png)
 
 📈 Future Enhancements
