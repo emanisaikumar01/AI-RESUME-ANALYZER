@@ -3,8 +3,8 @@
 An AI-powered multi-agent Resume Analyzer that evaluates resumes, identifies skill gaps, provides improvement suggestions, and matches candidates with relevant job roles. This project uses **multi-agent collaboration**, **Gemini LLM**, **memory**, and **parallel evaluation logic** to enhance resume quality and accelerate the hiring process.
 
 ## 🚀 Live Demo
-🔗 **Frontend:** https://ai-resume-analyzer-1cnm5hcn1-sai-kumar-s-projects.vercel.app/
-🔗 **Backend API:** https://ai-resume-analyzer-0cok.onrender.com
+🔗 **Frontend:** https://ai-resume-analyzer-1cnm5hcn1-sai-kumar-s-projects.vercel.app/  
+🔗 **Backend API:** https://ai-resume-analyzer-0cok.onrender.com  
 📂 **GitHub Repository:** https://github.com/emanisaikumar01/AI-RESUME-ANALYZER
 
 ---
@@ -47,7 +47,7 @@ The **AI Resume Analyzer** leverages **multiple intelligent agents** to:
 - Axios
 
 ### **Backend**
-- Python Flask / FastAPI (or your backend)
+- Python Flask / FastAPI
 - PDF Resume Parser
 - REST API
 
@@ -60,7 +60,7 @@ The **AI Resume Analyzer** leverages **multiple intelligent agents** to:
 - LLM-powered Agents
 - Session Memory
 - Context Engineering
-- Deployment on Cloud (Frontend + Backend)
+- Deployment on Cloud
 
 ---
 
@@ -75,7 +75,6 @@ The **AI Resume Analyzer** leverages **multiple intelligent agents** to:
 ---
 
 ## 📁 Project Structure
-
 AI-RESUME-ANALYZER/
 │
 ├── agents/
@@ -96,9 +95,8 @@ AI-RESUME-ANALYZER/
 │ └── benchmark-tests.ipynb
 └── README.md
 
-
-
-
+yaml
+Copy code
 
 ---
 
@@ -109,35 +107,27 @@ AI-RESUME-ANALYZER/
 cd backend
 pip install -r requirements.txt
 python main.py
-
-
 Frontend
+bash
+Copy code
 cd frontend
 npm install
 npm run dev
-
 📦 Deployment
+Frontend deployed on: Vercel
 
-Frontend deployed on Vercel / Netlify
-
-Backend deployed on Render / Railway / Cloud Run
+Backend deployed on: Render
 
 Environment variables secure (🚫 no API keys committed)
 
-
-## 📸 Screenshots
-
-### 📝 Before Analysis (Uploaded Resume)
+📸 Screenshots
+📝 Before Analysis (Uploaded Resume)
 ![Pre Analysis](https://raw.githubusercontent.com/emanisaikumar01/AI-RESUME-ANALYZER/main/pre%20analysis.png)
 
-### 📊 After AI Analysis Results
+📊 After AI Analysis Results
 ![Post Analysis](https://raw.githubusercontent.com/emanisaikumar01/AI-RESUME-ANALYZER/main/post%20analysis.png)
 
-
-
-
 📈 Future Enhancements
-
 Support for DOC/DOCX
 
 Resume template auto-generator
@@ -149,19 +139,11 @@ User login dashboard & history
 Analytics insights & scoring metrics
 
 🏆 Kaggle Capstone Track Submission
-
 Track: Enterprise Agents
 Why Agents? Multi-agent collaboration reduces manual review time, improves resume quality, and speeds up hiring workflows.
 
 👨‍💻 Author
-
 Sai Kumar E
-B.Tech CSE  – ICFAI University Hyderabad
+B.Tech CSE – ICFAI University Hyderabad
 LinkedIn: https://linkedin.com/in/
-...
 GitHub: https://github.com/emanisaikumar01
-
-
-
-
-
