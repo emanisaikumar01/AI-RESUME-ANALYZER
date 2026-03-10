@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const UploadResume = () => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [jobDescription, setJobDescription] = useState("");
   const [dragActive, setDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -62,7 +63,9 @@ const UploadResume = () => {
 
     try {
       const formData = new FormData();
+
       formData.append("file", selectedFile);
+      formData.append("jobDescription", jobDescription);
 
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/upload`,
@@ -80,7 +83,8 @@ const UploadResume = () => {
         return;
       }
 
-      navigate("/results", { state: { analysis: data.analysis } });
+      navigate("/results", { state: { analysis: data.data } });
+
     } catch (error) {
       alert("Upload failed, try again.");
     }
@@ -93,10 +97,11 @@ const UploadResume = () => {
       <div className="hero-heading">
         <h1 className="hero-title">Analyze Your Resume with AI</h1>
         <p className="hero-subtitle">
-          Upload your resume and get ATS-friendly suggestions instantly.
+          Upload your resume and compare it with a job description.
         </p>
       </div>
 
+      {/* Resume Upload */}
       <div
         className={`drop-zone ${dragActive ? "active" : ""}`}
         onDragEnter={handleDrag}
@@ -104,8 +109,6 @@ const UploadResume = () => {
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
-        <div className="upload-icon"></div>
-
         <h2 className="upload-title">
           {selectedFile ? selectedFile.name : "Drag & Drop Your Resume"}
         </h2>
@@ -133,6 +136,19 @@ const UploadResume = () => {
         </div>
       </div>
 
+      {/* Job Description Input */}
+      <div className="job-desc-container">
+        <h3>Paste Job Description (Optional)</h3>
+
+        <textarea
+          className="job-desc-input"
+          placeholder="Paste job description here to calculate job match score..."
+          value={jobDescription}
+          onChange={(e) => setJobDescription(e.target.value)}
+        />
+      </div>
+
+      {/* Analyze Button */}
       <button
         className={`analyze-btn ${loading ? "disabled" : ""}`}
         onClick={handleUpload}
