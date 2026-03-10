@@ -1,65 +1,41 @@
 const express = require("express");
 const multer = require("multer");
-const pdfParse = require("pdf-parse");
+const { handleResumeUpload } = require("../controllers/resumeController");
 
 const router = express.Router();
-const upload = multer();
 
-router.post("/", upload.single("file"), async (req, res) => {
+const upload = multer({
+  dest: "uploads/",
+  limits: {
+    fileSize: 5 * 1024 * 1024 
+  }
+});
+
+
+router.post("/", upload.single("file"), async (req, res, next) => {
   try {
+    console.log("📄 Resume upload request received");
+
     if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
-    console.log("📄 File received");
-
-    // Extract text from PDF
-    const pdfData = await pdfParse(req.file.buffer);
-    const extractedText = pdfData.text || "";
-    console.log("📄 Extracted text length:", extractedText.length);
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    const prompt = `Analyze the following resume and provide:
-- Key skills (bullet list)
-- Weaknesses / gaps (bullet list)
-- 3 suggested job roles
-- An approximate ATS score (0–100) with 1–2 lines of reasoning.
-
-Resume text:
-${extractedText}`;
-
-    // 🔥 Use a CURRENT model: gemini-2.5-flash
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-        }),
-      }
-    );
-
-    const result = await response.json();
-    console.log("🤖 Gemini raw response:", JSON.stringify(result, null, 2));
-
-    if (!result.candidates || !result.candidates.length) {
-      console.error("Gemini returned no candidates:", result);
-      return res.status(500).json({
-        error: "AI could not generate analysis",
-        details: result,
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded"
       });
     }
 
-    const analysis = result.candidates[0].content.parts[0].text;
+    console.log("📄 File name:", req.file.originalname);
+    console.log("📄 File path:", req.file.path);
 
-    return res.json({
-      success: true,
-      analysis,
-    });
+    return handleResumeUpload(req, res);
+
   } catch (error) {
-    console.error("🔥 Error in /upload:", error);
-    res.status(500).json({ error: error.message });
+    console.error("🔥 Upload route error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Upload failed",
+      error: error.message
+    });
   }
 });
 
